@@ -1,26 +1,59 @@
 //npm run build to compile then do node src/minesweeper.js
+const generatePlayerBoard =
+    //when called, will accept two arguments: the number of rows and number of columns. 
+    (numberOfRows, numberOfColumns) => {
+        let board = [];
+        for (let loopRow = 0; loopRow < numberOfRows; loopRow++) {
+            let row = [];
+            for (let loopColumn = 0; loopColumn < numberOfColumns; loopColumn++) {
+                row.push(' ');
+            }
+            board.push(row);
+        }
+        return board;
+    }
+
+const generateBombBoard = (numberOfRows, numberOfColumns, numberOfBombs) => {
+    let board = [];
+    for (let loopRow = 0; loopRow < numberOfRows; loopRow++) {
+        let row = [];
+        for (let loopColumn = 0; loopColumn < numberOfColumns; loopColumn++) {
+            row.push(null)
+
+        }
+        board.push(row);
+    }
+
+    let numberOfBombsPlaced = 0;
+    while (numberOfBombsPlaced < numberOfBombs) {
+        let randomRowIndex = Math.floor(Math.random() * numberOfRows);
+        //random number between zero and the specified number of rows.
+        let randomColumnIndex = Math.floor(Math.random() * numberOfColumns);
+
+        if (board[randomRowIndex][randomColumnIndex] !== 'B') {
+            board[randomRowIndex][randomColumnIndex] = 'B';
+            numberOfBombsPlaced++;
+        }
+        /*An important note:
+         The code in your while loop has the potential to place bombs
+          on top of already existing bombs. This will be fixed when you 
+          learn about control flow.*/
+    }
+    return board;
+}
 const printBoard = board => {
-    console.log("Current Board:  ");
-    // Log 'Current Board: '
-    // console.log(board[0]);
-    // Log the first element of the board variable
-    console.log(board[0].join('|'));
-    console.log(board[1].join('|'));
-    console.log(board[2].join('|'));
+    console.log(board.map(row => row.join(' | ')).join('\n'));
 };
 
 
+let playerBoard = generatePlayerBoard(3, 4);
 
-const board = [
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-];
+let bombBoard = generateBombBoard(3, 4, 5);
 
-printBoard(board);
-//printing emptyBoard
-board[0][1] = '1';
-board[2][2] = 'B';
-printBoard(board);
-//printing Board with the 1 on the 1st row and 2nd element and 
-//the last row with the 3 rd element print B
+
+console.log('Player Board: ')
+printBoard(playerBoard);
+
+
+console.log('Bomb Board: ')
+printBoard(bombBoard);
